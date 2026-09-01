@@ -1,4 +1,4 @@
-\# DARK ROOM
+# Anonymus ROOM
 
 
 
@@ -10,7 +10,7 @@ DARK ROOM allows users to instantly connect using a shared room code and communi
 
 
 
-\## Features
+# Features
 
 
 
@@ -36,7 +36,7 @@ DARK ROOM allows users to instantly connect using a shared room code and communi
 
 
 
-\## How It Works
+# How It Works
 
 
 
@@ -54,11 +54,11 @@ Anyone using the same room code can join the conversation.
 
 
 
-\## Tech Stack
+# Tech Stack
 
 
 
-\### Frontend
+# Frontend
 
 \- HTML5
 
@@ -72,7 +72,7 @@ Anyone using the same room code can join the conversation.
 
 
 
-\### Backend
+# Backend
 
 \- Python
 
@@ -82,7 +82,7 @@ Anyone using the same room code can join the conversation.
 
 
 
-\### Real-Time Communication
+# Real-Time Communication
 
 \- Socket.IO
 
@@ -90,7 +90,7 @@ Anyone using the same room code can join the conversation.
 
 
 
-\## Run Locally
+# Run Locally
 
 
 
