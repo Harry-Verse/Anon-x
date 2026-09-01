@@ -4,72 +4,57 @@ let username = "";
 let room = "";
 
 
-/* RANDOM ROOM */
+/* =========================================
+   GENERATE RANDOM ROOM
+========================================= */
 
-function createRandomRoom(){
+function generateRoom() {
 
     const randomRoom =
-        "dark-" +
+        "DR-" +
         Math.random()
-        .toString(36)
-        .substring(2, 10);
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
 
     document.getElementById("room").value = randomRoom;
 
-    document.getElementById("room").focus();
 }
 
 
-/* FOCUS ROOM */
+/* =========================================
+   JOIN ROOM
+========================================= */
 
-function focusRoom(){
-
-    document.getElementById("room").focus();
-
-    document
-        .getElementById("room")
-        .scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-}
-
-
-/* JOIN ROOM */
-
-function joinRoom(){
+function joinRoom() {
 
     username =
         document
-        .getElementById("username")
-        .value
-        .trim();
+            .getElementById("username")
+            .value
+            .trim();
 
     room =
         document
-        .getElementById("room")
-        .value
-        .trim();
+            .getElementById("room")
+            .value
+            .trim();
 
 
-    if(room === ""){
+    if (!room) {
 
         alert("Please enter a room code.");
 
         return;
+
     }
 
 
-    /* OPTIONAL USERNAME */
-
-    if(username === ""){
+    if (!username) {
 
         username =
             "Anonymous-" +
-            Math.floor(
-                1000 +
-                Math.random() * 9000
-            );
+            Math.floor(Math.random() * 9999);
 
     }
 
@@ -77,7 +62,6 @@ function joinRoom(){
     socket.emit("join_room", {
 
         username: username,
-
         room: room
 
     });
@@ -85,12 +69,14 @@ function joinRoom(){
 
     document
         .getElementById("connect-page")
-        .style.display = "none";
+        .style
+        .display = "none";
 
 
     document
         .getElementById("chat-page")
-        .style.display = "block";
+        .style
+        .display = "block";
 
 
     document
@@ -98,13 +84,18 @@ function joinRoom(){
         .innerText = room;
 
 
-    scrollBottom();
+    document
+        .getElementById("messageInput")
+        .focus();
+
 }
 
 
-/* SEND MESSAGE */
+/* =========================================
+   SEND MESSAGE
+========================================= */
 
-function sendMessage(){
+function sendMessage() {
 
     const input =
         document.getElementById("messageInput");
@@ -113,17 +104,17 @@ function sendMessage(){
         input.value.trim();
 
 
-    if(message === ""){
+    if (!message) {
+
         return;
+
     }
 
 
     socket.emit("send_message", {
 
         username: username,
-
         room: room,
-
         message: message
 
     });
@@ -139,42 +130,56 @@ function sendMessage(){
     input.value = "";
 
     scrollBottom();
+
 }
 
 
-/* RECEIVE MESSAGE */
+/* =========================================
+   RECEIVE MESSAGE
+========================================= */
 
 socket.on(
     "receive_message",
-
     (data) => {
 
-        if(data.username !== username){
+        if (
+            data.username === "SYSTEM"
+        ) {
+
+            addSystemMessage(
+                data.message
+            );
+
+            return;
+
+        }
+
+
+        if (
+            data.username !== username
+        ) {
 
             addMessage(
-
                 data.username,
-
                 data.message,
-
                 false
-
             );
 
         }
 
     }
-
 );
 
 
-/* ADD MESSAGE */
+/* =========================================
+   ADD MESSAGE
+========================================= */
 
 function addMessage(
     sender,
     text,
     isMe
-){
+) {
 
     const messages =
         document.getElementById("messages");
@@ -187,110 +192,158 @@ function addMessage(
     msg.classList.add("message");
 
 
-    if(isMe){
+    if (isMe) {
 
         msg.classList.add("me");
 
-    }else{
+    } else {
 
         msg.classList.add("other");
 
     }
 
 
-    /* SAFE TEXT */
-
-    const usernameDiv =
+    const name =
         document.createElement("div");
 
-    usernameDiv.className =
-        "username";
+    name.classList.add("username");
 
-    usernameDiv.textContent =
-        sender;
+    name.textContent = sender;
 
 
-    const textDiv =
+    const content =
         document.createElement("div");
 
-    textDiv.className =
-        "msgtext";
+    content.classList.add("msgtext");
 
-    textDiv.textContent =
-        text;
+    content.textContent = text;
 
 
-    msg.appendChild(usernameDiv);
+    msg.appendChild(name);
 
-    msg.appendChild(textDiv);
+    msg.appendChild(content);
 
 
     messages.appendChild(msg);
 
 
     scrollBottom();
-}
-
-
-/* CLEAR CHAT */
-
-function clearChat(){
-
-    document
-        .getElementById("messages")
-        .innerHTML = "";
 
 }
 
 
-/* ENTER ROOM */
+/* =========================================
+   SYSTEM MESSAGE
+========================================= */
+
+function addSystemMessage(text) {
+
+    const messages =
+        document.getElementById("messages");
+
+
+    const msg =
+        document.createElement("div");
+
+
+    msg.classList.add(
+        "system-message"
+    );
+
+
+    msg.textContent = text;
+
+
+    messages.appendChild(msg);
+
+
+    scrollBottom();
+
+}
+
+
+/* =========================================
+   CLEAR CHAT
+========================================= */
+
+function clearChat() {
+
+    const messages =
+        document.getElementById("messages");
+
+
+    messages.innerHTML = "";
+
+}
+
+
+/* =========================================
+   ENTER KEY - ROOM
+========================================= */
 
 document
-.getElementById("room")
-.addEventListener(
-    "keypress",
-    function(e){
+    .getElementById("room")
+    .addEventListener(
+        "keydown",
+        function (event) {
 
-        if(e.key === "Enter"){
+            if (
+                event.key === "Enter"
+            ) {
 
-            joinRoom();
+                joinRoom();
+
+            }
 
         }
-
-    }
-);
+    );
 
 
-/* ENTER SEND MESSAGE */
+/* =========================================
+   ENTER KEY - MESSAGE
+========================================= */
 
 document
-.getElementById("messageInput")
-.addEventListener(
-    "keypress",
-    function(e){
+    .getElementById("messageInput")
+    .addEventListener(
+        "keydown",
+        function (event) {
 
-        if(e.key === "Enter"){
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
 
-            sendMessage();
+                event.preventDefault();
+
+                sendMessage();
+
+            }
 
         }
-
-    }
-);
+    );
 
 
-/* AUTO SCROLL */
+/* =========================================
+   AUTO SCROLL
+========================================= */
 
-const messagesBox =
-    document.getElementById("messages");
+function scrollBottom() {
 
+    const messages =
+        document.getElementById("messages");
 
-function scrollBottom(){
 
     setTimeout(() => {
 
-        messagesBox.scrollTop =
-            messagesBox.scrollHeight;
+        window.scrollTo({
+
+            top:
+                document.body.scrollHeight,
+
+            behavior: "smooth"
+
+        });
 
     }, 50);
 
