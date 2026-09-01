@@ -3,79 +3,189 @@ const socket = io();
 let username = "";
 let room = "";
 
+
+/* RANDOM ROOM */
+
+function createRandomRoom(){
+
+    const randomRoom =
+        "dark-" +
+        Math.random()
+        .toString(36)
+        .substring(2, 10);
+
+    document.getElementById("room").value = randomRoom;
+
+    document.getElementById("room").focus();
+}
+
+
+/* FOCUS ROOM */
+
+function focusRoom(){
+
+    document.getElementById("room").focus();
+
+    document
+        .getElementById("room")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+}
+
+
 /* JOIN ROOM */
 
 function joinRoom(){
 
-    username = document.getElementById("username").value;
+    username =
+        document
+        .getElementById("username")
+        .value
+        .trim();
 
-    room = document.getElementById("room").value;
+    room =
+        document
+        .getElementById("room")
+        .value
+        .trim();
 
-    if(username === "" || room === ""){
-        alert("Enter Username & Room");
+
+    if(room === ""){
+
+        alert("Please enter a room code.");
+
         return;
     }
 
+
+    /* OPTIONAL USERNAME */
+
+    if(username === ""){
+
+        username =
+            "Anonymous-" +
+            Math.floor(
+                1000 +
+                Math.random() * 9000
+            );
+
+    }
+
+
     socket.emit("join_room", {
+
         username: username,
+
         room: room
+
     });
 
-    document.getElementById("connect-page").style.display = "none";
 
-    document.getElementById("chat-page").style.display = "block";
+    document
+        .getElementById("connect-page")
+        .style.display = "none";
 
-    document.getElementById("room-name").innerText = room;
+
+    document
+        .getElementById("chat-page")
+        .style.display = "block";
+
+
+    document
+        .getElementById("room-name")
+        .innerText = room;
+
 
     scrollBottom();
 }
+
 
 /* SEND MESSAGE */
 
 function sendMessage(){
 
-    const input = document.getElementById("messageInput");
+    const input =
+        document.getElementById("messageInput");
 
-    const message = input.value;
+    const message =
+        input.value.trim();
 
-    if(message.trim() === ""){
+
+    if(message === ""){
         return;
     }
 
+
     socket.emit("send_message", {
+
         username: username,
+
         room: room,
+
         message: message
+
     });
 
-    addMessage(username, message, true);
+
+    addMessage(
+        username,
+        message,
+        true
+    );
+
 
     input.value = "";
 
     scrollBottom();
 }
 
+
 /* RECEIVE MESSAGE */
 
-socket.on("receive_message", (data) => {
+socket.on(
+    "receive_message",
 
-    if(data.username !== username){
+    (data) => {
 
-        addMessage(data.username, data.message, false);
+        if(data.username !== username){
+
+            addMessage(
+
+                data.username,
+
+                data.message,
+
+                false
+
+            );
+
+        }
 
     }
 
-});
+);
+
 
 /* ADD MESSAGE */
 
-function addMessage(sender, text, isMe){
+function addMessage(
+    sender,
+    text,
+    isMe
+){
 
-    const messages = document.getElementById("messages");
+    const messages =
+        document.getElementById("messages");
 
-    const msg = document.createElement("div");
+
+    const msg =
+        document.createElement("div");
+
 
     msg.classList.add("message");
+
 
     if(isMe){
 
@@ -84,97 +194,104 @@ function addMessage(sender, text, isMe){
     }else{
 
         msg.classList.add("other");
+
     }
 
-    msg.innerHTML = `
-        <div class="username">${sender}</div>
-        <div class="msgtext">${text}</div>
-    `;
+
+    /* SAFE TEXT */
+
+    const usernameDiv =
+        document.createElement("div");
+
+    usernameDiv.className =
+        "username";
+
+    usernameDiv.textContent =
+        sender;
+
+
+    const textDiv =
+        document.createElement("div");
+
+    textDiv.className =
+        "msgtext";
+
+    textDiv.textContent =
+        text;
+
+
+    msg.appendChild(usernameDiv);
+
+    msg.appendChild(textDiv);
+
 
     messages.appendChild(msg);
 
+
     scrollBottom();
 }
+
 
 /* CLEAR CHAT */
 
 function clearChat(){
 
-    document.getElementById("messages").innerHTML = "";
+    document
+        .getElementById("messages")
+        .innerHTML = "";
+
 }
 
-/* ENTER PRESS AUTO CONNECT */
 
-document.getElementById("room").addEventListener("keypress", function(e){
+/* ENTER ROOM */
 
-    if(e.key === "Enter"){
-        joinRoom();
+document
+.getElementById("room")
+.addEventListener(
+    "keypress",
+    function(e){
+
+        if(e.key === "Enter"){
+
+            joinRoom();
+
+        }
+
     }
+);
 
-});
 
-/* AUTO SCROLL CHAT */
+/* ENTER SEND MESSAGE */
 
-const messagesBox = document.getElementById("messages");
+document
+.getElementById("messageInput")
+.addEventListener(
+    "keypress",
+    function(e){
+
+        if(e.key === "Enter"){
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* AUTO SCROLL */
+
+const messagesBox =
+    document.getElementById("messages");
+
 
 function scrollBottom(){
 
-    messagesBox.scrollTop = messagesBox.scrollHeight;
+    setTimeout(() => {
 
-}
+        messagesBox.scrollTop =
+            messagesBox.scrollHeight;
 
-/* MOBILE KEYBOARD DETECT */
-
-const msgInput = document.getElementById("messageInput");
-
-msgInput.addEventListener("focus", ()=>{
-
-    document.body.classList.add("keyboard-open");
-
-});
-
-msgInput.addEventListener("blur", ()=>{
-
-    document.body.classList.remove("keyboard-open");
-
-});
-
-let localStream;
-let peerConnection;
-
-const servers = {
-    iceServers:[
-        {
-            urls:"stun:stun.l.google.com:19302"
-        }
-    ]
-};
-
-async function startVoiceCall(){
-
-    localStream = await navigator.mediaDevices.getUserMedia({
-        audio:true
-    });
-
-    peerConnection = new RTCPeerConnection(servers);
-
-    localStream.getTracks().forEach(track=>{
-        peerConnection.addTrack(track, localStream);
-    });
-
-}
-
-async function startVideoCall(){
-
-    localStream = await navigator.mediaDevices.getUserMedia({
-        audio:true,
-        video:true
-    });
-
-    peerConnection = new RTCPeerConnection(servers);
-
-    localStream.getTracks().forEach(track=>{
-        peerConnection.addTrack(track, localStream);
-    });
+    }, 50);
 
 }

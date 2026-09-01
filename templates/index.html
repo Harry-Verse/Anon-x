@@ -2,114 +2,335 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>DARK ROOM</title>
+    <title>DARK ROOM — Anonymous Conversations</title>
 
     <link rel="stylesheet" href="/static/style.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body>
 
+    <!-- BACKGROUND EFFECTS -->
+    <div class="bg-grid"></div>
+    <div class="glow glow-pink"></div>
+    <div class="glow glow-blue"></div>
+
     <div class="zoom-wrap">
 
-        <!-- CONNECT PAGE -->
+        <!-- ================= CONNECT PAGE ================= -->
 
         <div class="connect-page" id="connect-page">
 
-            <div class="connect-card">
+            <!-- LEFT SIDE -->
+            <section class="hero-section">
 
-                <h1 class="logo">
-                    DARK <span class="redx">ROOM</span>
-                </h1>
+                <div class="brand">
+                    <div class="brand-icon">
+                        ◇
+                    </div>
 
-                <p class="desc">
-                    Anonymous Conversations
-                </p>
+                    <div class="brand-name">
+                        DARK <span>ROOM</span>
+                    </div>
+                </div>
 
-                <label>USERNAME</label>
+                <div class="hero-content">
 
-                <input
-                    type="text"
-                    id="username"
-                    placeholder="e.g. Harsh">
+                    <div class="eyebrow">
+                        WELCOME TO THE
+                    </div>
 
-                <label>ROOM CODE</label>
+                    <h1>
+                        DARK <span>ROOM</span>
+                    </h1>
 
-                <input
-                    type="text"
-                    id="room"
-                    placeholder="e.g. 192.168.1.1">
+                    <p class="hero-description">
+                        Anonymous Conversations.<br>
+                        No Limits. No Judgement. Just Talk.
+                    </p>
 
-                <p class="small">
-                    Anyone Using The Same Room Code Can Join This Chat.
-                </p>
+                    <div class="hero-actions">
 
-                <button onclick="joinRoom()">
-                    CONNECT →
-                </button>
+                        <button class="primary-action" onclick="focusRoom()">
+                            <span>⚡</span>
+                            Join a Room
+                        </button>
 
-            </div>
+                        <button class="secondary-action" onclick="createRandomRoom()">
+                            <span>＋</span>
+                            Create Room
+                        </button>
+
+                    </div>
+
+                    <div class="online-users">
+                        <div class="avatars">
+                            <span>H</span>
+                            <span>A</span>
+                            <span>K</span>
+                            <span>R</span>
+                        </div>
+
+                        <div class="online-status"></div>
+
+                        <span>Anonymous users online</span>
+                    </div>
+
+                </div>
+
+                <!-- FEATURES -->
+
+                <div class="feature-list">
+
+                    <div class="feature">
+
+                        <div class="feature-icon pink">
+                            ◉
+                        </div>
+
+                        <div>
+                            <h3>100% ANONYMOUS</h3>
+                            <p>No signups. No personal information.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon cyan">
+                            🔒
+                        </div>
+
+                        <div>
+                            <h3>SECURE & PRIVATE</h3>
+                            <p>Private rooms for anonymous conversations.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon pink">
+                            ◌
+                        </div>
+
+                        <div>
+                            <h3>REAL PEOPLE</h3>
+                            <p>Connect with people around the world.</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="feature">
+
+                        <div class="feature-icon cyan">
+                            ⚡
+                        </div>
+
+                        <div>
+                            <h3>INSTANT ACCESS</h3>
+                            <p>Create or join a room in seconds.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quote-box">
+                    <span>“</span>
+
+                    <p>
+                        In a world full of noise,<br>
+                        some rooms are meant for truth.
+                    </p>
+
+                    <strong>— Dark Room</strong>
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT SIDE ROOM CARD -->
+
+            <section class="room-section">
+
+                <div class="room-card">
+
+                    <div class="card-glow"></div>
+
+                    <div class="join-badge">
+                        🔒 &nbsp; JOIN THE CONVERSATION
+                    </div>
+
+                    <h2>Enter Room</h2>
+
+                    <p class="room-subtitle">
+                        Join an existing room or<br>
+                        create your own.
+                    </p>
+
+
+                    <div class="input-group">
+
+                        <label>
+                            <span>♙</span>
+                            USERNAME <small>(OPTIONAL)</small>
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="text"
+                                id="username"
+                                placeholder="e.g. Harsh"
+                            >
+
+                            <span class="input-icon">♙</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label>
+                            <span>#</span>
+                            ROOM CODE
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <input
+                                type="text"
+                                id="room"
+                                placeholder="e.g. 192.168.1.1"
+                            >
+
+                            <span class="input-icon">#</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="random-room">
+
+                        <div class="random-info">
+
+                            <div class="random-icon">
+                                ♧
+                            </div>
+
+                            <div>
+                                <strong>Don't have a room code?</strong>
+                                <span>Generate a private random room.</span>
+                            </div>
+
+                        </div>
+
+                        <button onclick="createRandomRoom()">
+                            RANDOM ROOM
+                        </button>
+
+                    </div>
+
+
+                    <button class="connect-button" onclick="joinRoom()">
+
+                        <span>CONNECT TO ROOM</span>
+
+                        <b>→</b>
+
+                    </button>
+
+
+                    <div class="room-note">
+
+                        <span>♧</span>
+
+                        Anyone using the same room code can join this chat.
+
+                    </div>
+
+                </div>
+
+            </section>
 
         </div>
 
-        <!-- CHAT PAGE -->
+
+        <!-- ================= CHAT PAGE ================= -->
 
         <div class="chat-page" id="chat-page">
 
+            <div class="chat-bg-grid"></div>
+
             <div class="topbar">
 
-                <div class="roomtext">
-                    ROOM // <span id="room-name"></span>
-                </div>
+                <div class="chat-brand">
 
-                <div class="top-actions">
+                    <div class="mini-logo">
+                        ◇
+                    </div>
 
-                    <button class="callbtn" onclick="startVoiceCall()">
-                        📞
-                    </button>
-
-                    <button class="videobtn" onclick="startVideoCall()">
-                        📹
-                    </button>
-
-                    <button class="clearbtn" onclick="clearChat()">
-                        CLEAR
-                    </button>
+                    <div class="roomtext">
+                        DARK ROOM
+                        <span>// <span id="room-name"></span></span>
+                    </div>
 
                 </div>
+
+                <button class="clearbtn" onclick="clearChat()">
+                    CLEAR CHAT
+                </button>
 
             </div>
+
 
             <div class="start">
-                — Anonymous Connection Established —
+                <span></span>
+                ANONYMOUS CONNECTION ESTABLISHED
+                <span></span>
             </div>
+
 
             <div id="messages"></div>
 
-            <div class="chat-input">
 
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Type Message...">
+            <div class="chat-input-wrapper">
 
-                <button onclick="sendMessage()">
-                    SEND
-                </button>
+                <div class="chat-input">
+
+                    <input
+                        type="text"
+                        id="messageInput"
+                        placeholder="Type your message..."
+                    >
+
+                    <button onclick="sendMessage()">
+                        SEND
+                        <span>→</span>
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
     </div>
+
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
