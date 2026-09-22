@@ -89,18 +89,3 @@ Anyone using the same room code can join the conversation.
 \- WebSockets
 
 
-
-# Run Locally
-
-
-
-Clone the repository:
-
-
-
-```bash
-
-git clone https://github.com/Harrxhu/anon-x.git
-
-cd anon-x
-
